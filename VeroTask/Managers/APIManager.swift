@@ -92,7 +92,6 @@ class APIManager {
                       response.statusCode == 200 {
                 // Success! Parse the JSON response data
                 let json = try? JSON(data: data)
-                print(json)
                 DispatchQueue.main.async {
                     let realm = try! Realm()
                     try! realm.write {

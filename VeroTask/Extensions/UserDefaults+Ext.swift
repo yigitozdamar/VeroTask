@@ -15,4 +15,9 @@ extension UserDefaults {
     func getAccessToken() -> String? {
         return string(forKey: "accessToken")
     }
+    
+    func removeAccessToken() {
+        removeObject(forKey: "accessToken")
+        synchronize()
+    }
 }

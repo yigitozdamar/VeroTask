@@ -66,9 +66,21 @@ class HomeViewController: UIViewController, UISearchControllerDelegate, UISearch
     }
     
     func setupQRMenu(){
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "QR Scan", style: .plain, target: self, action: #selector(qrScanner))
+        
+        let qrScanButton = UIBarButtonItem(title: "QR Scan", style: .plain, target: self, action: #selector(qrScanner))
+        let quitButton = UIBarButtonItem(image: UIImage(systemName: "escape"), style: .plain, target: self, action: #selector(logout))
+        navigationItem.rightBarButtonItems = [quitButton,qrScanButton]
+
     }
     
+    @objc func logout() {
+        UserDefaults.standard.removeAccessToken()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+        navigationController?.popToRootViewController(animated: true)
+    }
+
+
     @objc func refreshData(){
         APIManager.shared.requestUrl(accessToken: UserDefaults.standard.getAccessToken()!) { [weak self] personTaskRM in
             DispatchQueue.main.async {
@@ -155,3 +167,4 @@ extension HomeViewController: DataScannerViewControllerDelegate {
         print("Scanner became unavailable")
     }
 }
+
