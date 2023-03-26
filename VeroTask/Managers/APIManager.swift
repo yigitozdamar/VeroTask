@@ -13,18 +13,18 @@ class APIManager {
     
     static let shared = APIManager()
     
-    func authenticateUser(username: String, password: String, completion: @escaping (Bool) -> Void) {
-        callingAuthAPI(username: username, password: password) { accessToken in
+    func authenticateUser(username: String, password: String, completion: @escaping (Bool,String?) -> Void) {
+        callingAuthAPI(username: username, password: password) { accessToken, message in
             if !accessToken.isEmpty {
                 UserDefaults.standard.setAccessToken(accessToken)
-                completion(true)
+                completion(true,nil)
             } else {
-                completion(false)
+                completion(false,message)
             }
         }
     }
     
-    func callingAuthAPI(username: String = "365", password: String = "1", completion: @escaping (String)-> Void) {
+    func callingAuthAPI(username: String, password: String, completion: @escaping (String,String?)-> Void) {
         
         //In case of basic Oauth token changes use base64LoginString
 //        let loginString = String(format: "%@:%@", username, password)
@@ -61,13 +61,14 @@ class APIManager {
                         DispatchQueue.main.async {
                             let accessToken = json["oauth"]["access_token"].stringValue
                             print("Access Token: \(accessToken)")
-                            completion(accessToken)
+                            completion(accessToken,nil)
                             UserDefaults.standard.setAccessToken(accessToken)
                         }
                     }
                 
             } else {
-                print("Unexpected response: \(response.debugDescription)")
+                print("Unexpected response AUTH API: \(response)")
+                completion("","Network Error")
             }
            
         })

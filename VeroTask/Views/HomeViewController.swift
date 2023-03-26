@@ -77,7 +77,9 @@ class HomeViewController: UIViewController, UISearchControllerDelegate, UISearch
         UserDefaults.standard.removeAccessToken()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let loginVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-        navigationController?.popToRootViewController(animated: true)
+        let navVC = UINavigationController(rootViewController: loginVC)
+        navVC.modalPresentationStyle = .fullScreen
+        self.present(navVC, animated: true)
     }
 
 
